@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mother_international_comp_website/constants/app_routes.dart';
+import 'package:mother_international_comp_website/widgets/nav_item.dart';
 
 import '../constants/app_colors.dart';
 
@@ -29,23 +32,27 @@ class CustomAppBar extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'About',
-                  style: Theme.of(context).textTheme.bodyText1,
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.aboutRoute,
+                      arguments: {'page': 'about'}),
+                  child: const NavButton(text: 'About', page: 'About'),
                 ),
-                FlutterLogo(
+                const FlutterLogo(
                   size: 20,
                 ),
-                Text(
-                  'Enter Online',
-                  style: Theme.of(context).textTheme.bodyText1,
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.registerRoute,
+                      arguments: {'page': 'register'}),
+                  child:
+                      const NavButton(text: 'Enter Online', page: 'Register'),
                 ),
               ],
             ),
           ),
-          Text(
-            'Contact Us',
-            style: Theme.of(context).textTheme.bodyText1,
+          GestureDetector(
+            onTap: () => Get.toNamed(AppRoutes.contactRoute,
+                arguments: {'page': 'contact'}),
+            child: const NavButton(text: 'Contact Us', page: 'Contact Us'),
           ),
         ],
       ),

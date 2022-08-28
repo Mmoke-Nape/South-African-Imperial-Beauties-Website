@@ -6,9 +6,13 @@ import 'package:mother_international_comp_website/constants/app_colors.dart';
 import 'package:mother_international_comp_website/screens/home/widgets/home_screen_1.dart';
 import 'package:mother_international_comp_website/screens/home/widgets/home_screen_2.dart';
 import 'package:mother_international_comp_website/screens/home/widgets/winner_display_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../responsive/responsive.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_button.dart';
+import '../../widgets/footer.dart';
+import '../../widgets/on_hover.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -65,17 +69,16 @@ class HomeScreen extends StatelessWidget {
       ),
       body: Scrollbar(
         thumbVisibility: true,
+        thickness: 15,
+
+        // hoverThickness: 20,
         child: SingleChildScrollView(
           child: Column(
-            children: [
-              const HomeScreen1(),
-              const HomeScreen2(),
-              const SizedBox(height: 50),
-              Container(
-                width: size.width,
-                height: 100,
-                color: AppColors.mainBlue,
-              ),
+            children: const [
+              HomeScreen1(),
+              HomeScreen2(),
+              SizedBox(height: 50),
+              Footer(),
             ],
           ),
         ),

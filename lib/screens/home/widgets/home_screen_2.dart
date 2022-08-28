@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mother_international_comp_website/constants/app_routes.dart';
 import 'package:mother_international_comp_website/screens/home/widgets/winner_display_item.dart';
 
 import '../../../widgets/custom_button.dart';
@@ -106,7 +108,7 @@ class HomeScreen2 extends StatelessWidget {
                   ),
                   const SizedBox(height: 70),
                   CustomButton(
-                    press: () {},
+                    press: () => Get.toNamed(AppRoutes.registerRoute),
                     title: 'ENTER NOW',
                   ),
                 ],

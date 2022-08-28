@@ -17,13 +17,63 @@ class HomeScreen1 extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            right: size.width * .1,
-            top: size.height * .05,
-            child: Image.asset(
-              'images/models/white_model1.png',
-              height: size.height * .85,
-              fit: BoxFit.fitHeight,
+            right: 0,
+            top: 0,
+            child: ShaderMask(
+              shaderCallback: (rect) {
+                return LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Colors.black, Colors.transparent],
+                ).createShader(Rect.fromLTRB(0, 0, rect.width, rect.height));
+              },
+              blendMode: BlendMode.dstIn,
+              child: Image.asset(
+                'assets/images/crown.png',
+                height: size.height * .82,
+                fit: BoxFit.contain,
+              ),
             ),
+            // child: Stack(children: <Widget>[
+            //   Container(
+            //     decoration: BoxDecoration(
+            //       color: Colors.transparent,
+            //       image: DecorationImage(
+            //         fit: BoxFit.fill,
+            //         image: AssetImage(
+            //           'assets/images/crown.png',
+            //         ),
+            //       ),
+            //     ),
+            //     height: size.height * .82,
+            //   ),
+            //   Container(
+            //     height: size.height * .82,
+            //     decoration: BoxDecoration(
+            //         // color: Colors.white,
+            //         gradient: LinearGradient(
+            //             begin: FractionalOffset.topCenter,
+            //             end: FractionalOffset.bottomCenter,
+            //             colors: [
+            //           Colors.grey.withOpacity(0.0),
+            //           Colors.black,
+            //         ],
+            //             stops: [
+            //           0.0,
+            //           1.0
+            //         ])),
+            //   )
+            // ]),
+
+            // ColorFiltered(
+            //   colorFilter: ColorFilter.mode(
+            //       Colors.red.withOpacity(0.4), BlendMode.srcOver),
+            //   child: Image.asset(
+            //     'assets/images/crown.png',
+            //     height: size.height * .82,
+            //     fit: BoxFit.fitHeight,
+            //   ),
+            // ),
           ),
           Positioned(
             left: size.width * .15,
