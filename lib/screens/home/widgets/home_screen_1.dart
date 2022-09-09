@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
+import '../../../constants/app_routes.dart';
 import '../../../widgets/custom_button.dart';
 
 class HomeScreen1 extends StatelessWidget {
@@ -127,7 +129,7 @@ class HomeScreen1 extends StatelessWidget {
                 ),
                 SizedBox(width: size.width * .05),
                 CustomButton(
-                  press: () {},
+                  press: () => Get.toNamed(AppRoutes.registerRoute),
                   title: 'JOIN US',
                 ),
               ],
