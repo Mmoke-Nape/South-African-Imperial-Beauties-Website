@@ -24,10 +24,15 @@ class Footer extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
-                '© South African Imperial Beauties - 2022 | Developed by ',
-                style: TextStyle(
-                  color: Colors.white,
+              Expanded(
+                child: const Text(
+                  '© South African Imperial Beauties - 2022 | Developed by',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                  softWrap: true,
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.visible,
                 ),
               ),
               GestureDetector(

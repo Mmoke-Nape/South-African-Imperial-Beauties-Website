@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../constants/app_colors.dart';
+import '../../../responsive/responsive.dart';
 
 class WinnerDisplayItem extends StatelessWidget {
   const WinnerDisplayItem({
@@ -21,19 +22,36 @@ class WinnerDisplayItem extends StatelessWidget {
       clipBehavior: Clip.none,
       children: [
         Positioned(
-          left: isOnRightSide ? 25 : -25,
-          top: 25,
+          left: isOnRightSide
+              ? Responsive.isMobile(context)
+                  ? 15
+                  : 25
+              : Responsive.isMobile(context)
+                  ? -15
+                  : -25,
+          top: Responsive.isMobile(context) ? 15 : 25,
           child: Container(
-            height: size.height * .35,
-            width: isCenter ? size.width * .12 + 50 : size.width * .12,
+            height: Responsive.isMobile(context)
+                ? size.height * .25
+                : size.height * .35,
+            width: isCenter
+                ? Responsive.isMobile(context)
+                    ? size.width * .3 + 25
+                    : size.width * .12 + 50
+                : Responsive.isMobile(context)
+                    ? size.width * .3
+                    : size.width * .12,
             decoration: BoxDecoration(
               border: Border.all(color: AppColors.mainBlue, width: 2),
             ),
           ),
         ),
         Container(
-          height: size.height * .35,
-          width: size.width * .12,
+          height: Responsive.isMobile(context)
+              ? size.height * .25
+              : size.height * .35,
+          width:
+              Responsive.isMobile(context) ? size.width * .3 : size.width * .12,
           color: Colors.white,
           child: Image.asset(
             image,
@@ -50,11 +68,15 @@ class WinnerDisplayItem extends StatelessWidget {
           child: Container(
             // height: 40,
             // width: 100,
-            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            padding: EdgeInsets.symmetric(
+                vertical: Responsive.isMobile(context) ? 5 : 10,
+                horizontal: Responsive.isMobile(context) ? 10 : 20),
             decoration: BoxDecoration(
                 border: Border.all(color: AppColors.mainBlue, width: 2),
                 color: Colors.white),
-            child: Text(title),
+            child: Text(title,
+                style: TextStyle(
+                    fontSize: Responsive.isMobile(context) ? 14 : null)),
           ),
         ),
       ],

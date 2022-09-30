@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/app_colors.dart';
+import '../responsive/responsive.dart';
 import 'on_hover.dart';
 
 class CustomButton extends StatelessWidget {
@@ -26,7 +27,9 @@ class CustomButton extends StatelessWidget {
             // padding: const EdgeInsets.symmetric(
             //     vertical: 10, horizontal: 20),
             height: 80,
-            width: size.width * .12,
+            width: Responsive.isMobile(context)
+                ? size.width * .4
+                : size.width * .12,
             decoration: BoxDecoration(
               border: Border.all(
                 color: AppColors.mainBlue,

@@ -24,51 +24,41 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         toolbarHeight: 70,
         leading: Center(
-          child: Text(
-            'HOME',
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                color: AppColors.mainBlue, fontWeight: FontWeight.bold),
-          ),
+          child: Responsive.isMobile(context)
+              ? const FlutterLogo(size: 20)
+              : Text(
+                  'HOME',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: AppColors.mainBlue, fontWeight: FontWeight.bold),
+                ),
         ),
         leadingWidth: size.width * .2,
         centerTitle: true,
-        title: SizedBox(
-          width: size.width * .2,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'About',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-              FlutterLogo(
-                size: 20,
-              ),
-              Text(
-                'Enter Online',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ],
-          ),
+        title: Image.asset(
+          'assets/images/logo/logo full.png',
+          height: 60,
         ),
         actions: [
           Center(
-            child: Container(
-              margin: EdgeInsets.only(
-                right: size.width * .1,
-              ),
-              child: Text(
-                'Contact Us',
-                style: Theme.of(context).textTheme.bodyText1,
-              ),
-            ),
+            child: Responsive.isMobile(context)
+                ? IconButton(
+                    onPressed: () {},
+                    icon: Icon(Icons.menu, color: Colors.black),
+                  )
+                : Container(
+                    margin: EdgeInsets.only(
+                      right: size.width * .1,
+                    ),
+                    child: Text('Enter Online',
+                        style: Theme.of(context).textTheme.bodyText1),
+                  ),
           ),
         ],
         elevation: 0,
         backgroundColor: AppColors.scaffoldBg,
       ),
       body: Scrollbar(
-        thumbVisibility: true,
+        thumbVisibility: Responsive.isMobile(context) ? false : true,
         thickness: 15,
 
         // hoverThickness: 20,

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/app_routes.dart';
+import '../../../responsive/responsive.dart';
 import '../../../widgets/custom_button.dart';
 
 class HomeScreen1 extends StatelessWidget {
@@ -19,11 +20,12 @@ class HomeScreen1 extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            right: 0,
+            right: Responsive.isMobile(context) ? null : 0,
+            left: Responsive.isMobile(context) ? -size.width * .85 : null,
             top: 0,
             child: ShaderMask(
               shaderCallback: (rect) {
-                return LinearGradient(
+                return const LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [Colors.black, Colors.transparent],
@@ -78,61 +80,105 @@ class HomeScreen1 extends StatelessWidget {
             // ),
           ),
           Positioned(
-            left: size.width * .15,
-            top: size.height * .2,
+            left: Responsive.isMobile(context)
+                ? size.width * .1
+                : size.width * .15,
+            top: Responsive.isMobile(context)
+                ? size.height * .1
+                : size.height * .2,
             child: Text(
-              'SOUTH AFRICAN',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1!
-                  .copyWith(color: Colors.black87),
+              'World',
+              style: Theme.of(context).textTheme.headline1!.copyWith(
+                  color: Colors.black87,
+                  fontSize: Responsive.isMobile(context) ? 50 : null),
             ),
           ),
           Positioned(
-            left: size.width * .2,
-            top: size.height * .26,
+            left: Responsive.isMobile(context)
+                ? size.width * .03
+                : size.width * .2,
+            top: Responsive.isMobile(context)
+                ? size.height * .14
+                : size.height * .26,
             child: Text(
               'Imperial Beauties',
-              style: Theme.of(context).textTheme.headline2!.copyWith(),
+              style: Theme.of(context)
+                  .textTheme
+                  .headline2!
+                  .copyWith(fontSize: Responsive.isMobile(context) ? 60 : null),
             ),
           ),
           Positioned(
-            left: size.width * .17,
-            top: size.height * .45,
+            left: Responsive.isMobile(context)
+                ? size.width * .14
+                : size.width * .23,
+            top: Responsive.isMobile(context)
+                ? size.height * .2
+                : size.height * .4,
+            child: Text(
+              'SOUTH AFRICA',
+              style: Theme.of(context).textTheme.headline1!.copyWith(
+                  color: Colors.black87,
+                  fontSize: Responsive.isMobile(context) ? 40 : 80),
+            ),
+          ),
+          Positioned(
+            left: Responsive.isMobile(context)
+                ? size.width * .08
+                : size.width * .17,
+            top: Responsive.isMobile(context)
+                ? size.height * .25
+                : size.height * .5,
             child: Text(
               'SCHOLARSHIP PAGEANT',
               style: Theme.of(context).textTheme.headline1!.copyWith(
                   color: Colors.black87,
-                  fontSize: 33,
+                  fontSize: Responsive.isMobile(context) ? 23 : 33,
                   fontWeight: FontWeight.w500),
             ),
           ),
           Positioned(
-            left: size.width * .13,
-            bottom: size.height * .20,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Container(
-                //   margin: const EdgeInsets.only(top: 10),
-                //   color: AppColors.mainBlue,
-                //   height: 1.5,
-                //   width: size.width * .1,
-                // ),
-                SizedBox(width: size.width * .05),
-                SizedBox(
-                  width: size.width * .3,
-                  child: const Text(
-                    'South African Imperial Beauties is a celebration of womanhood through an equal opporitinty platform for women to showcase their talent and beauty to the world.',
-                    textAlign: TextAlign.center,
+            left: Responsive.isMobile(context)
+                ? size.width * .1
+                : size.width * .13,
+            bottom: Responsive.isMobile(context)
+                ? size.height * .25
+                : size.height * .20,
+            child: Center(
+              child: Flex(
+                direction: Responsive.isMobile(context)
+                    ? Axis.vertical
+                    : Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 10),
+                  //   color: AppColors.mainBlue,
+                  //   height: 1.5,
+                  //   width: size.width * .1,
+                  // ),
+                  if (!Responsive.isMobile(context))
+                    SizedBox(width: size.width * .05),
+                  SizedBox(
+                    width: Responsive.isMobile(context)
+                        ? size.width * .8
+                        : size.width * .3,
+                    child: Text(
+                      'South African Imperial Beauties is a celebration of womanhood through an equal opporitinty platform for women to showcase their talent and beauty to the world.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: Responsive.isMobile(context) ? 20 : null),
+                    ),
                   ),
-                ),
-                SizedBox(width: size.width * .05),
-                CustomButton(
-                  press: () => Get.toNamed(AppRoutes.registerRoute),
-                  title: 'JOIN US',
-                ),
-              ],
+                  if (!Responsive.isMobile(context))
+                    SizedBox(width: size.width * .05),
+                  if (Responsive.isMobile(context)) const SizedBox(height: 30),
+                  CustomButton(
+                    press: () => Get.toNamed(AppRoutes.registerRoute),
+                    title: 'JOIN US',
+                  ),
+                ],
+              ),
             ),
           ),
         ],
