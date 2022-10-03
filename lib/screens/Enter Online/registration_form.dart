@@ -2,14 +2,18 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mother_international_comp_website/constants/app_colors.dart';
 
+import '../../constants/utils.dart';
 import '../../providers/contestant.dart';
 import '../../responsive/responsive.dart';
+import '../../src/app.dart';
 import '../../widgets/custom_button.dart';
 
 class RegistrationForm extends StatefulWidget {
@@ -43,13 +47,6 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   final formKey = GlobalKey<FormState>();
 
-  File? hSPhotoMobile;
-  Uint8List hSPhotoWeb = Uint8List(8);
-  String? hSPhotoUrl;
-
-  File? fLPhotoMobile;
-  Uint8List fLPhotoWeb = Uint8List(8);
-  String? fLPhotoUrl;
   // XFile? _userImage;
 
   @override
@@ -72,103 +69,118 @@ class _RegistrationFormState extends State<RegistrationForm> {
     super.dispose();
   }
 
-  void _pickedhSPhoto() async {
-    if (!kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  File? hSPhotoMobile;
+  // Uint8List hSPhotoWeb = Uint8List(8);
+  String? hSPhotoWeb;
+  String? hSPhotoUrl;
 
-      if (image != null) {
-        var imageTemp = File(image.path);
-        setState(() {
-          hSPhotoMobile = imageTemp;
-        });
-        print('hs photo mobile successfull');
-      }
-    } else if (kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+  File? fLPhotoMobile;
+  String? fLPhotoWeb;
+  // Uint8List fLPhotoWeb = Uint8List(8);
+  String? fLPhotoUrl;
 
-      if (image != null) {
-        var imageTemp = await XFile(image.toString()).readAsBytes();
-        setState(() {
-          hSPhotoWeb = imageTemp;
-          hSPhotoMobile = File('a');
-        });
-        print('hs photoweb successfull');
-      }
-    } else {
-      print('Somthing Went very wrong');
-    }
-  }
-
-  void _pickedfLPhoto() async {
-    if (!kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (image != null) {
-        var imageTemp = File(image.path);
-        setState(() {
-          fLPhotoMobile = imageTemp;
-        });
-        print('fl photo mobile successfull');
-      }
-    } else if (kIsWeb) {
-      final ImagePicker _picker = ImagePicker();
-      XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-
-      if (image != null) {
-        var imageTemp = await XFile(image.toString()).readAsBytes();
-        // var imageTemp = await image.readAsBytes();
-        setState(() {
-          fLPhotoWeb = imageTemp;
-          fLPhotoMobile = File('a');
-        });
-        print('fl photoweb successfull');
-      }
-    } else {
-      print('Somthing Went very wrong');
-    }
-  }
+  bool loading = false;
 
   Future uploadHSPhoto() async {
-    final ref = FirebaseStorage.instance.ref().child('$categoryValue').child(
-        '${nameController.text.trim()} ${lastNameController.text.trim()} HS');
+    final ref = FirebaseStorage.instance
+        .ref()
+        .child('$categoryValue')
+        .child(
+            '${nameController.text.trim()} ${lastNameController.text.trim()}')
+        .child('Head & Shoulders');
 
-    try {
-      UploadTask uploadTask = ref.putData(hSPhotoWeb);
-      print('Successfully put hsphoto in storage');
-    } on FirebaseException catch (e) {
-      print('HERE IS THE PROBLEM with hsPhoto!!! $e');
-    }
-    var temp = await ref.getDownloadURL();
-    setState(() {
-      hSPhotoUrl = temp;
-    });
+    final upTask = ref.putData(
+      await XFile(hSPhotoWeb!).readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+    final url = await upTask.then(
+      (snap) => snap.ref.getDownloadURL(),
+    );
+
+    return url;
   }
 
-  Future uploadFLPhoto() async {
-    final ref = FirebaseStorage.instance.ref().child('$categoryValue').child(
-        '${nameController.text.trim()} ${lastNameController.text.trim()} FL');
+  selectHSImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      XFile selectedImg = pickedFile;
 
-    try {
-      UploadTask uploadTask = ref.putData(fLPhotoWeb);
-      print('Successfully put FLphoto in storage');
-    } on FirebaseException catch (e) {
-      print('HERE IS THE PROBLEM with fLPhoto!!! $e');
+      final path = File(selectedImg.path).path;
+      setState(() {
+        hSPhotoWeb = path;
+      });
+      //  setState this path variable//
+// This path is String type//
     }
-    var temp = await ref.getDownloadURL();
-    setState(() {
-      fLPhotoUrl = temp;
-    });
+  }
+
+  selectFLImage() async {
+    final ImagePicker imagePicker = ImagePicker();
+    final pickedFile = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      XFile selectedImg = pickedFile;
+
+      final path = File(selectedImg.path).path;
+      setState(() {
+        fLPhotoWeb = path;
+      });
+      //  setState this path variable//
+// This path is String type//
+    }
+  }
+
+  static Future<String> uploadSingleImg({
+    /// Path  where  the  image  will  be  saved  in  storage.
+    required String path,
+    required String name_last,
+
+    ///Image  File  path
+    required String imagePath,
+
+    ///image name
+    required String fileName,
+  }) async {
+    final FirebaseStorage storage = FirebaseStorage.instance;
+
+    final reference =
+        storage.ref().child(path).child(name_last).child(fileName);
+
+    final upTask = reference.putData(
+      await XFile(imagePath).readAsBytes(),
+      SettableMetadata(contentType: 'image/jpeg'),
+    );
+    final url = await upTask.then(
+      (snap) => snap.ref.getDownloadURL(),
+    );
+
+    return url;
   }
 
   Future submitForm() async {
+    setState(() {
+      loading = true;
+    });
+
     final docUser =
         FirebaseFirestore.instance.collection('$categoryValue').doc();
 
-    await uploadHSPhoto();
-    await uploadFLPhoto();
+    // await uploadHSPhoto();
+    // await uploadFLPhoto();
+    var hsurl = await uploadSingleImg(
+      path: categoryValue!,
+      name_last:
+          '${nameController.text.trim()} ${lastNameController.text.trim()}',
+      imagePath: hSPhotoWeb!,
+      fileName: 'Head Shoulders',
+    );
+    var flurl = await uploadSingleImg(
+      path: categoryValue!,
+      name_last:
+          '${nameController.text.trim()} ${lastNameController.text.trim()}',
+      imagePath: fLPhotoWeb!,
+      fileName: 'Full Length',
+    );
 
     final contestant = Contestant(
       id: docUser.id,
@@ -180,42 +192,44 @@ class _RegistrationFormState extends State<RegistrationForm> {
       instaHandle: istaHandelController.text.trim(),
       address: addressController.text.trim(),
       category: categoryValue!,
-      hSPhotoUrl: "hSPhotoUrl!",
-      fLPhotoUrl: "fLPhotoUrl!",
+      hSPhotoUrl: hsurl,
+      fLPhotoUrl: flurl,
     );
 
     final json = contestant.toJson();
     await docUser.set(json);
     print('Successfully uploaded to firebase');
+
+    setState(() {
+      loading = false;
+    });
+
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return Center(
+            child: Container(
+              child: Column(
+                children: [
+                  Text(
+                      'You have successfully entered! We will be in contact with you!'),
+                ],
+              ),
+            ),
+          );
+        });
+    nameController.clear();
+    lastNameController.clear();
+    emailController.clear();
+    iDNumberController.clear();
+    dOBController.clear();
+    istaHandelController.clear();
+    addressController.clear();
   }
-  // var cate;
 
-  // // Upload imagae to firebase storage
-  // final ref = FirebaseStorage.instance.ref().child('$categoryValue').child(
-  //     '${nameController.text.trim()} ${lastNameController.text.trim()}');
-
-  // try {
-  //   UploadTask uploadTask = ref.putData(hSPhotoWeb);
-  //   print('Successfully put hsphoto in storage');
-  // } on FirebaseException catch (e) {
-  //   print('HERE IS THE PROBLEM with hsPhoto!!! $e');
-  // }
-  // final hSPhotoUrl = await ref.getDownloadURL();
-  // // print('HERE IS THE hSPhotoUrl HERE!!!! : $hSPhotoUrl');
-
-  // try {
-  //   // await ref.putFile(File(fLPhotoWeb!.path));
-  //   UploadTask uploadTask = ref.putData(fLPhotoWeb);
-  //   print('Successfully put flphoto in storage');
-  // } on FirebaseException catch (e) {
-  //   print('HERE IS THE PROBLEM with flPhoto!!! $e');
-  // }
-
-  // final fLPhotoUrl = await ref.getDownloadURL();
-  // // print('HERE IS THE fLPhotoUrl HERE!!!! : $fLPhotoUrl');
   final categoryItems = [
     '4-6',
-    // "Hey everyone. I've been really struggling with this and im in pickle now. I cant 1) upload images onto firebase storage 2) download the link then 3) add the links to firebase database with other information. Obviously this is flutter web. I am in desperate need of help"
     '7-9',
     '10-12',
     '13-15',
@@ -227,6 +241,10 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   String? categoryValue;
 
+  String? fLphotoErr;
+  String? hSphotoErr;
+  String? categoryValErr;
+
   @override
   // var direction = Responsive.isMobile(context) ? Axis.vertical : Axis.horizontal;
   Widget build(BuildContext context) {
@@ -235,48 +253,59 @@ class _RegistrationFormState extends State<RegistrationForm> {
     final MobileForm = Column(
       children: [
         TextFormField(
-          controller: nameController,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              // width: 0.0 produces a thin "hairline" border
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
+            enabled: !loading,
+            controller: nameController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
               ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
               ),
-              borderRadius: BorderRadius.circular(15),
+              labelText: 'Name',
             ),
-            labelText: 'Name',
-          ),
-          keyboardType: TextInputType.name,
-        ),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your name';
+              }
+            }),
         const SizedBox(height: 20),
         TextFormField(
-          controller: lastNameController,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              // width: 0.0 produces a thin "hairline" border
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
+            enabled: !loading,
+            controller: lastNameController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
               ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
               ),
-              borderRadius: BorderRadius.circular(15),
+              labelText: 'Last Name',
             ),
-            labelText: 'Last Name',
-          ),
-          keyboardType: TextInputType.name,
-        ),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your last name';
+              }
+            }),
         const SizedBox(height: 20),
         TextFormField(
+          enabled: !loading,
           controller: emailController,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
@@ -294,10 +323,15 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
             labelText: 'Email',
           ),
-          keyboardType: TextInputType.name,
+          keyboardType: TextInputType.emailAddress,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (email) => email != null && !EmailValidator.validate(email)
+              ? 'Enter a valid email'
+              : null,
         ),
         const SizedBox(height: 20),
         TextFormField(
+          enabled: !loading,
           controller: iDNumberController,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
@@ -316,9 +350,17 @@ class _RegistrationFormState extends State<RegistrationForm> {
             labelText: 'ID Number',
           ),
           keyboardType: TextInputType.number,
+          validator: (value) {
+            if (value != null && value.length != 13) {
+              return 'Enter valid South African ID number';
+            } else {
+              return null;
+            }
+          },
         ),
         const SizedBox(height: 20),
         TextFormField(
+          enabled: !loading,
           controller: dOBController,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
@@ -337,6 +379,11 @@ class _RegistrationFormState extends State<RegistrationForm> {
             labelText: 'Date of birth',
           ),
           keyboardType: TextInputType.name,
+          validator: (value) {
+            if (value!.isEmpty) {
+              return 'Please enter your date of birth';
+            }
+          },
           onTap: () async {
             DateTime? pickedDate = await showDatePicker(
                 context: context,
@@ -353,8 +400,37 @@ class _RegistrationFormState extends State<RegistrationForm> {
         ),
         const SizedBox(height: 20),
         TextFormField(
-          controller: istaHandelController,
-          decoration: InputDecoration(
+            enabled: !loading,
+            controller: istaHandelController,
+            decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  // width: 0.0 produces a thin "hairline" border
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 221, 221, 221),
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                border: OutlineInputBorder(
+                  borderSide: const BorderSide(
+                    color: Color.fromARGB(255, 221, 221, 221),
+                  ),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                labelText: 'Instagram Handle',
+                labelStyle: TextStyle()),
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your instagram handle';
+              } else {
+                return null;
+              }
+            }),
+        const SizedBox(height: 20),
+        TextFormField(
+            enabled: !loading,
+            controller: addressController,
+            decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 // width: 0.0 produces a thin "hairline" border
                 borderSide: const BorderSide(
@@ -368,31 +444,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ),
                 borderRadius: BorderRadius.circular(15),
               ),
-              labelText: 'Instagram Handle',
-              labelStyle: TextStyle()),
-          keyboardType: TextInputType.text,
-        ),
-        const SizedBox(height: 20),
-        TextFormField(
-          controller: addressController,
-          decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              // width: 0.0 produces a thin "hairline" border
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
-              ),
-              borderRadius: BorderRadius.circular(15),
+              labelText: 'Address',
             ),
-            border: OutlineInputBorder(
-              borderSide: const BorderSide(
-                color: Color.fromARGB(255, 221, 221, 221),
-              ),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            labelText: 'Address',
-          ),
-          keyboardType: TextInputType.streetAddress,
-        ),
+            keyboardType: TextInputType.streetAddress,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your address';
+              } else {
+                return null;
+              }
+            }),
         const SizedBox(height: 20),
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -429,6 +490,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
       ),
       child: Form(
         key: formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             Text(
@@ -445,48 +507,62 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 children: [
                   Expanded(
                     child: TextFormField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          // width: 0.0 produces a thin "hairline" border
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                        enabled: !loading,
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
+                          labelText: 'Name',
                         ),
-                        labelText: 'Name',
-                      ),
-                      keyboardType: TextInputType.name,
-                    ),
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your name';
+                          } else {
+                            return null;
+                          }
+                        }),
                   ),
                   const SizedBox(width: 30),
                   Expanded(
                     child: TextFormField(
-                      controller: lastNameController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          // width: 0.0 produces a thin "hairline" border
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                        controller: lastNameController,
+                        enabled: !loading,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
+                          labelText: 'Last Name',
                         ),
-                        labelText: 'Last Name',
-                      ),
-                      keyboardType: TextInputType.name,
-                    ),
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your last name';
+                          } else {
+                            return null;
+                          }
+                        }),
                   ),
                 ],
               ),
@@ -513,7 +589,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         ),
                         labelText: 'Email',
                       ),
-                      keyboardType: TextInputType.name,
+                      enabled: !loading,
+                      keyboardType: TextInputType.emailAddress,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (email) =>
+                          email != null && !EmailValidator.validate(email)
+                              ? 'Enter a valid email'
+                              : null,
                     ),
                   ),
                   const SizedBox(width: 30),
@@ -535,8 +617,16 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         labelText: 'ID Number',
+                        enabled: !loading,
                       ),
                       keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value != null && value.length != 13) {
+                          return 'Enter valid South African ID number';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
                 ],
@@ -564,7 +654,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         ),
                         labelText: 'Date of birth',
                       ),
-                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your date of birth';
+                        } else {
+                          return null;
+                        }
+                      },
+                      enabled: !loading,
                       onTap: () async {
                         DateTime? pickedDate = await showDatePicker(
                             context: context,
@@ -583,25 +680,33 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   const SizedBox(width: 30),
                   Expanded(
                     child: TextFormField(
-                      controller: istaHandelController,
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          // width: 0.0 produces a thin "hairline" border
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                        controller: istaHandelController,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Color.fromARGB(255, 221, 221, 221),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
                           ),
-                          borderRadius: BorderRadius.circular(15),
+                          // labelText: 'Instagram Handle',
+                          hintText: 'Instagram Handle',
                         ),
-                        labelText: 'Instagram Handle',
-                      ),
-                      keyboardType: TextInputType.text,
-                    ),
+                        keyboardType: TextInputType.text,
+                        enabled: !loading,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your instagram handle';
+                          } else {
+                            return null;
+                          }
+                        }),
                   ),
                 ],
               ),
@@ -629,6 +734,14 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         labelText: 'Address',
                       ),
                       keyboardType: TextInputType.streetAddress,
+                      enabled: !loading,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter your address';
+                        } else {
+                          return null;
+                        }
+                      },
                     ),
                   ),
                   const SizedBox(width: 30),
@@ -676,6 +789,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     child: Center(
                       child: Column(
                         children: [
+                          if (fLphotoErr != null)
+                            Text(
+                              fLphotoErr!,
+                              style: const TextStyle(color: Colors.red),
+                            ),
+                          if (fLphotoErr != null) const SizedBox(height: 10),
                           Text(
                             'Full Length Photo',
                             style: Theme.of(context).textTheme.bodyText1!,
@@ -684,9 +803,9 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           ),
                           const SizedBox(height: 20),
                           CustomButton(
-                              title: 'Select photo', press: _pickedfLPhoto),
+                              title: 'Select photo', press: selectFLImage),
                           const SizedBox(height: 10),
-                          if (fLPhotoMobile != null)
+                          if (fLPhotoWeb != null)
                             const Icon(
                               Icons.thumb_up,
                               color: Colors.green,
@@ -702,15 +821,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
                     fit: FlexFit.loose,
                     child: Column(
                       children: [
+                        if (hSphotoErr != null)
+                          Text(
+                            hSphotoErr!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
+                        if (hSphotoErr != null) const SizedBox(height: 10),
                         Text('Head & Shoulder Photo',
                             style: Theme.of(context).textTheme.bodyText1!
                             // .copyWith(fontSize: 50),
                             ),
                         const SizedBox(height: 20),
                         CustomButton(
-                            title: 'Select photo', press: _pickedhSPhoto),
+                            title: 'Select photo', press: selectHSImage),
                         const SizedBox(height: 10),
-                        if (hSPhotoMobile != null)
+                        if (hSPhotoWeb != null)
                           const Icon(
                             Icons.thumb_up,
                             color: Colors.green,
@@ -725,10 +850,45 @@ class _RegistrationFormState extends State<RegistrationForm> {
             const SizedBox(height: 50),
             if (Responsive.isMobile(context)) const Divider(),
             if (Responsive.isMobile(context)) const SizedBox(height: 30),
-            CustomButton(
-              title: 'Submit Information',
-              press: submitForm,
-            ),
+            loading
+                ? const SizedBox(
+                    height: 60,
+                    width: 60,
+                    child: CircularProgressIndicator(color: AppColors.mainBlue),
+                  )
+                : CustomButton(
+                    title: 'Submit Information',
+                    press: () {
+                      final isValid = formKey.currentState!.validate();
+
+                      if (!isValid) {
+                        setState(() => loading = false);
+                        return;
+                      } else if (fLPhotoWeb == null) {
+                        setState(() {
+                          fLphotoErr =
+                              'Please submit a full length picture of the contestant';
+                        });
+                        return;
+                      } else if (hSPhotoWeb == null) {
+                        hSphotoErr =
+                            'Please submit a head & sholders picture of the contestant';
+                        return;
+                      } else if (categoryValue == null) {
+                        categoryValErr =
+                            'Please select an appropriate category';
+                        return;
+                      } else if (nameController.text.isEmpty ||
+                          lastNameController.text.isEmpty ||
+                          istaHandelController.text.isEmpty ||
+                          addressController.text.isEmpty ||
+                          dOBController.text.isEmpty) {
+                        return;
+                      } else {
+                        submitForm();
+                      }
+                    },
+                  ),
             const SizedBox(height: 50),
           ],
         ),

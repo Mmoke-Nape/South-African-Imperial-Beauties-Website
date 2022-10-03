@@ -11,6 +11,8 @@ import '../screens/Enter Online/registration_screen.dart';
 import '../screens/home/home_screen.dart';
 import 'settings/settings_controller.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
   const MyApp({
@@ -38,6 +40,7 @@ class MyApp extends StatelessWidget {
           // Provide the generated AppLocalizations to the MaterialApp. This
           // allows descendant Widgets to display the correct translations
           // depending on the user's locale.
+          title: 'World Imperial Beauties South Africa',
           localizationsDelegates: const [
             AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
@@ -90,13 +93,8 @@ class MyApp extends StatelessWidget {
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           home: const HomeScreen(),
-          // home: const LoginSignupScreen(),
-          // home: const TopLevel(),
-          // home: const LandingScreen(),
-          // home: const UserProfile(),
 
           getPages: [
-            //Authentication routes
             GetPage(
               name: AppRoutes.aboutRoute,
               page: () => const AboutScreen(),
@@ -111,6 +109,11 @@ class MyApp extends StatelessWidget {
               name: AppRoutes.registerRoute,
               page: () => const RegistrationScreen(),
               title: 'Enter',
+            ),
+            GetPage(
+              name: AppRoutes.homeRoute,
+              page: () => const HomeScreen(),
+              title: 'Home',
             ),
           ],
         );

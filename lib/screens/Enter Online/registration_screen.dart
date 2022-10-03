@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mother_international_comp_website/constants/app_routes.dart';
 import 'package:mother_international_comp_website/responsive/responsive.dart';
 import 'package:mother_international_comp_website/screens/Enter%20Online/registration_form.dart';
 import 'package:mother_international_comp_website/widgets/footer.dart';
@@ -14,8 +16,65 @@ class RegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final GlobalKey<ScaffoldState> _key = GlobalKey();
     return Scaffold(
+      key: _key,
+      drawer: Container(
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
+        color: Colors.white,
+        width: size.width * .7,
+        height: size.height,
+        child: Column(
+          children: [
+            Image.asset(
+              'assets/images/logo/logo full.png',
+              // height: size.height * .3,
+              fit: BoxFit.fitWidth,
+            ),
+            SizedBox(height: size.height * .2),
+            Container(
+              height: 70,
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    Get.back();
+                    Get.toNamed(AppRoutes.homeRoute);
+                  },
+                  child: Text(
+                    'Home',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 5),
+            Container(
+              height: 70,
+              width: double.maxFinite,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              decoration: const BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColors.mainBlue),
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Enter Online',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: AppColors.mainBlue, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         toolbarHeight: 70,
         // leading: Center(
         //   child: Responsive.isMobile(context)
@@ -25,19 +84,33 @@ class RegistrationScreen extends StatelessWidget {
         leadingWidth: size.width * .2,
         centerTitle: true,
         title: Responsive.isMobile(context)
-            ? null
+            ? Image.asset(
+                'assets/images/logo/logo.png',
+                height: 60,
+              )
             : SizedBox(
                 width: size.width * .3,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      'Home',
-                      style: Theme.of(context).textTheme.bodyText1,
+                    InkWell(
+                      // onHover: (value) => setState(() {
+                      //   hoverColor = AppColors.mainBlue;
+                      // }),
+                      onTap: () => Get.toNamed(AppRoutes.homeRoute),
+                      hoverColor: Colors.transparent,
+                      child: Text(
+                        'Home',
+                        style: Theme.of(context).textTheme.bodyText1,
+                      ),
                     ),
-                    Image.asset(
-                      'assets/images/logo/logo full.png',
-                      height: 60,
+                    InkWell(
+                      onTap: () => Get.toNamed(AppRoutes.homeRoute),
+                      hoverColor: Colors.transparent,
+                      child: Image.asset(
+                        'assets/images/logo/logo full.png',
+                        height: 60,
+                      ),
                     ),
                     Text(
                       'Enter Online',
@@ -48,24 +121,17 @@ class RegistrationScreen extends StatelessWidget {
                   ],
                 ),
               ),
-        // actions: [
-        //   Center(
-        //     child: Responsive.isMobile(context)
-        //         ? IconButton(
-        //             onPressed: () {},
-        //             icon: Icon(Icons.menu, color: Colors.black),
-        //           )
-        //         : Container(
-        //             margin: EdgeInsets.only(
-        //               right: size.width * .1,
-        //             ),
-        //             child: Text(
-        //               'Contact Us',
-        //               style: Theme.of(context).textTheme.bodyText1,
-        //             ),
-        //           ),
-        //   ),
-        // ],
+        actions: [
+          Center(
+              child: Responsive.isMobile(context)
+                  ? IconButton(
+                      onPressed: () {
+                        _key.currentState!.openDrawer();
+                      },
+                      icon: const Icon(Icons.menu, color: AppColors.mainBlue),
+                    )
+                  : null),
+        ],
         elevation: 0,
         backgroundColor: AppColors.scaffoldBg,
       ),
@@ -438,7 +504,7 @@ class RegistrationScreen extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'Competion Divisions',
+                                            'Compete In',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .headline2!
@@ -510,52 +576,44 @@ class RegistrationScreen extends StatelessWidget {
 
 2. A registration fee of R 500 to be paid before a model can be considered as a finalist 
 
-3. Should you get chosen as a finalist then you pay an entry fee of R1000
-
-4. You are required to raise a compulsory participation fee of R3500
+4. You are required to raise a compulsory sponsorship fee of R3500
 
 5. Accommodation and travel fees will be for your account.
 
-6. Hair and make up will be on your account
-
-7. Program book cost R200
+6. Hair and make up will be arranged but will be on your account
 
 8. Judges’ decision is final, and no correspondence will be entered into.
 
 9. By entering each contestant commits herself to the following:
-      • Support the Pageant Charity Project
-      • Finalist entry fee of R1000
+      • Compulsory sponsorship fee of R3 500
       • Sell 3 x Gala tickets for R250 each (R150 for children under 10 years-include dinner) If the tickets are not sold the contestant must raise the same value additionally and submit along with the sponsorship.
-      • Compulsory participation fee of R3 500
+      • R100 for corier of the sashes      
+
 10. All finalists receive finalist sashes to be used discreetly and worn with pride. Any abuse will lead to disqualification.
 
-11. No fees paid are transferable or refundable nor does it cover the cancellation fee.in such event the cancellation fee is R1500.
+11. No fees paid are transferable or refundable nor does it cover the cancellation fee in such event the cancellation fee is R1500.
 
-12. The overseas grand supreme prize will only materialize when there are more than 20 participants per division. 
+12. The overseas grand supreme prize will only materialize when there are more than 20 participants per division (4-12 & 13-50+). 
 
-13. Payment Plan: (Strictly) This include entry fee of R1000, Participation Fee R3 500, R750 for tickets & dinner.
-               Payment 1: R 1500 (September)
-               Payment 2: R1500 (October)
-               Payment 3: R1500 (November)
-               Payment 4: R950 (December)                 
-
-2b). The R5 500 will include:
+13. Payment Plan: (Strictly) This include Sponsorship Fee R3 500, R750 for tickets & dinner and R100.
+               Payment 1: R1000 (October)
+               Payment 2: R1500 (November)
+               Payment 3: R1500 (December)
+               Payment 4: R350 (January 2023)                 
+14. Cash payout are dependent on the number of contestants per category. Cash payments will be done after a month after the competition.
+2b). The total R4350 will include:
         - 0pening number dress
         - T-shirt.
         - finalist Sash
         - All courier costs
+
 Please make payments immediate inter banking transaction for payments.
 
-A 20% is given to the early bird payment of 100% payment done before 01 of December.
-2c) Every model should sell 10 x tickets = 2500  at a  cost of 
+All rules and regulations need to be complied with, to avoid disqualification and a deduction of your points.
 
-All rules and regulations need to be complied with, to avoid disqualification.
-
-Closing date is 20 AUGUST 2022.
+Closing date is 15 DECEMBER 2022.
 
 NO LATE ENTRIES WILL BE ACCEPTED.
-
-Finalists must be available on 3rd of SEPTEMBER for the event hosted at ALBERTON CIVIC THEATRE.
 
 Under no circumstances will any refunds be made.
 
@@ -565,27 +623,7 @@ No communication with judges, before, during or after the competition will be to
 
 OVERALL prizes are not transferable or redeemable for cash.
 
-All contestants will be judged on the following:
-
-One casual walk in a blue denim and a PINK PAGEANT T-SHIRT (included in entry fee)
-Introduction on stage (in either English or Afrikaans) in jeans and pageant shirt.
-One walk in Evening wear of own choice, this should be age appropriate. No limit to colour, design or beadwork, remember though less is more!
-
-Each contestant will receive a participation certificate, top 5 in each age category will qualify to represent SA at the Miss International Princess Pageant held annually in USA in April/May 2023. Top 3 will be awarded sashes, tiaras and trophies, per age category. Dependant on entries, Overall Grand Supreme Winner will receive a fully paid trip to the value of R45 000 to the USA to participate in the International Princess Pageant in 2023. OVERALL prizes are not transferable or redeemable for cash.
-
-The Overall Grand Supreme winner is age independent and will be the contestant with the overall highest score. If there are not enough entries this prize is subject to change.
-
 No make-up will be allowed under 12 years, only lip gloss, we are looking for a natural young girl.
-
-The winners are NOT prohibited from participating in other pageants; winners are welcome to compete in any other pageants of their choice during their reign.
-
-1. The contestant will be subject to a R100 fee & HEADSHOT as well as a R1 000.00 entry fee. Closing date is 20 AUGUST 2023
-2. Finalists must be available on 3 SEPTEMBER 2022 for the pageant event at ALBERTON CIVIC THEATRE.
-3. Prizes are not redeemable or transferable for cash.
-4. If a contestant withdraws from event 7 days prior to event, the contestant will be responsible for all costs already paid towards contestant for final event.
-5. The decision of the judges is final.
-6. Entry fees are non-refundable, once payments have been made we cannot refund your costs in any event.
-7. The TM Miss International Princess is the property of Slap Productions, any infringement on this event will have legal consequences and the entities involved will be liable
 
 ''',
                       textAlign: TextAlign.center,

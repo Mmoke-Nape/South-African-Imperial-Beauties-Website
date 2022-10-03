@@ -105,7 +105,7 @@ class HomeScreen1 extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .headline2!
-                  .copyWith(fontSize: Responsive.isMobile(context) ? 60 : null),
+                  .copyWith(fontSize: Responsive.isMobile(context) ? 55 : null),
             ),
           ),
           Positioned(

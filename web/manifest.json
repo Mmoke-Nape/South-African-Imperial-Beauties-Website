@@ -1,16 +1,16 @@
 {
-    "name": "mother_international_comp_website",
-    "short_name": "mother_international_comp_website",
+    "name": "World Imperial Beauties South Africa",
+    "short_name": "World Imperial Beauties South Africa",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Welcome to World Imperial Beauties South Africa! We are a pageant that recognizes the power of the crown. Our core values are Self Confidence Sisterhood and Service.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
         {
-            "src": "icons/Icon-192.png",
+            "src": "icons/Icon-192.png  ",
             "sizes": "192x192",
             "type": "image/png"
         },
