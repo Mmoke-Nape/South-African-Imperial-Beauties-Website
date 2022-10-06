@@ -1,22 +1,16 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:mother_international_comp_website/constants/app_colors.dart';
 import 'package:mother_international_comp_website/constants/app_routes.dart';
 
-import '../../constants/utils.dart';
 import '../../providers/contestant.dart';
 import '../../responsive/responsive.dart';
-import '../../src/app.dart';
 import '../../widgets/custom_button.dart';
 
 class RegistrationForm extends StatefulWidget {
