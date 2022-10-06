@@ -198,7 +198,7 @@ class RegistrationScreen extends StatelessWidget {
                     child: SizedBox(
                       width: size.width * .7,
                       child: const Text(
-                        'Entries open: 30 August 2022\nCompetition date: April 2023',
+                        'Entries open: 5 September 2022\nCompetition date: March 2023',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -334,7 +334,7 @@ class RegistrationScreen extends StatelessWidget {
                                                     color: Colors.white,
                                                     fontSize: 30),
                                           ),
-                                          const SizedBox(height: 20),
+                                          const SizedBox(height: 30),
                                           const Text(
                                             'GRAND PRIZE:',
                                             style: TextStyle(
@@ -351,20 +351,13 @@ class RegistrationScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 30),
                                           const Text(
-                                            'TOP 3:',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Text(
-                                            'Category winner, 1st princess and 2nd princess will recive an opportunity to compete overseas for the international title',
+                                            'Top 16, Top 5 , Top 3 Category winner:  will recieve an opportunity to compete overseas for the international title',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
                                           ),
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 30),
                                         ],
                                       ),
                                     ),
@@ -414,6 +407,112 @@ class RegistrationScreen extends StatelessWidget {
                                           const Text(
                                             'Opening performance by the finalists',
                                             textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'We Supply',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2!
+                                                .copyWith(
+                                                    // color: AppColors.mainBlue,
+                                                    color: Colors.white,
+                                                    fontSize: 30),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          const Text(
+                                            'Offical T-Shirt',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          const Text(
+                                            'Carry bag for all finalists',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          const Text(
+                                            'Official finalist sash',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 40),
+                              SizedBox(
+                                width: Responsive.isMobile(context)
+                                    ? null
+                                    : size.width * .4,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'Judging Criteria',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline2!
+                                                .copyWith(
+                                                    color: Colors.white,
+                                                    // color: AppColors.mainBlue,
+                                                    fontSize: 30),
+                                          ),
+                                          const SizedBox(height: 20),
+                                          const Text(
+                                            'Category Titleholders are determined by their scores in the following areas:',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 10),
+                                          const Text(
+                                            'Evening Wear - 30%',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const Text(
+                                            'Fun Fashion - 30%',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const Text(
+                                            'Interview - 30%',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          const Text(
+                                            'Community Service Project - 10%',
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -549,6 +648,13 @@ class RegistrationScreen extends StatelessWidget {
                                         color: Colors.white,
                                       ),
                                     ),
+                                    const SizedBox(height: 10),
+                                    const Text(
+                                      'GladysN@worldimperialbeauties.com',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -556,7 +662,9 @@ class RegistrationScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const RegistrationForm(),
+                      RegistrationForm(
+                        regContext: context,
+                      ),
                     ],
                   ),
                   const SizedBox(height: 50),
@@ -567,6 +675,7 @@ class RegistrationScreen extends StatelessWidget {
                           // color: Colors.white,
                           fontSize: Responsive.isMobile(context) ? 32 : 50,
                         ),
+                    textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 50),
                   SizedBox(
@@ -599,31 +708,35 @@ class RegistrationScreen extends StatelessWidget {
                Payment 1: R1000 (October)
                Payment 2: R1500 (November)
                Payment 3: R1500 (December)
-               Payment 4: R350 (January 2023)                 
+               Payment 4: R350 (January 2023)   
+
 14. Cash payout are dependent on the number of contestants per category. Cash payments will be done after a month after the competition.
-2b). The total R4350 will include:
-        - 0pening number dress
+
+ The total R4350 will include:
         - T-shirt.
         - finalist Sash
         - All courier costs
+        - Sponsorship
+        - Gala tickets
 
-Please make payments immediate inter banking transaction for payments.
+ 15. Please make payments immediate inter banking transaction for payments.
 
-All rules and regulations need to be complied with, to avoid disqualification and a deduction of your points.
+16. All rules and regulations need to be complied with, to avoid disqualification and a deduction of your points.
+
+17. Please submit 2 professional photos for finalist announcement and voting
+
+18. No communication with judges, before, during or after the competition will be tolerated. No parents or spectators will be permitted to interfere on any level.
+
+19. No make-up will be allowed under 12 years, only lip gloss, we are looking for a natural young girl.
+
+20. OVERALL prizes are not transferable or redeemable for cash.
+
+21. The judge’s decision is final; no correspondence will be entered into.
 
 Closing date is 15 DECEMBER 2022.
 
-NO LATE ENTRIES WILL BE ACCEPTED.
-
 Under no circumstances will any refunds be made.
 
-The judge’s decision is final; no correspondence will be entered into.
-
-No communication with judges, before, during or after the competition will be tolerated. No parents or spectators will be permitted to interfere on any level.
-
-OVERALL prizes are not transferable or redeemable for cash.
-
-No make-up will be allowed under 12 years, only lip gloss, we are looking for a natural young girl.
 
 ''',
                       textAlign: TextAlign.center,
@@ -632,10 +745,118 @@ No make-up will be allowed under 12 years, only lip gloss, we are looking for a 
                 ],
               ),
             ),
-            // const SizedBox(height: 50),
+            const SizedBox(height: 20),
+            Container(
+              width:
+                  Responsive.isMobile(context) ? size.width : size.width * .8,
+              // color: Colors.green,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Areas Of Competition',
+                    style: Theme.of(context).textTheme.headline2!.copyWith(
+                        // color: AppColors.mainBlue,
+                        color: AppColors.mainBlue,
+                        fontSize: Responsive.isMobile(context) ? 30 : 40),
+                  ),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: Flex(
+                      direction: Responsive.isMobile(context)
+                          ? Axis.vertical
+                          : Axis.horizontal,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const CategoryDivisions(
+                          title: 'EVENING WEAR',
+                          description:
+                              'During this competition the delegates will be evaluated on fit and appropriateness of gown, eye contact, poise, confidence, facial beauty, smile and general impression! Delegates may choose evening gown of choice.',
+                          image: '/images/wears/evening.jpg',
+                        ),
+                        if (Responsive.isMobile(context))
+                          const SizedBox(height: 20),
+                        const CategoryDivisions(
+                          isCenter: true,
+                          title: 'FUN FASHION',
+                          description:
+                              'During this competition the delegates will be evaluated on creativity, general appeal, poise, projection, confidence and overall impression. Delegates may wear outfit of choice.',
+                          image: '/images/wears/fun.jpg',
+                        ),
+                        const SizedBox(height: 20),
+                        const CategoryDivisions(
+                          title: 'INTERVIEW',
+                          description:
+                              'During this competition the delegates will be evaluated on their speaking abilities, overall appearance, communication skills and personality. It will be a fun time, so relax and be you! Delegates may interview suit or dress of choice.',
+                          image: '/images/wears/interview.jpg',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
             const Footer(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CategoryDivisions extends StatelessWidget {
+  const CategoryDivisions({
+    Key? key,
+    required this.image,
+    required this.title,
+    required this.description,
+    this.isCenter = false,
+  }) : super(key: key);
+  final String image;
+  final String title;
+  final String description;
+  final bool isCenter;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Container(
+      width: Responsive.isMobile(context) ? size.width : size.width * .22,
+      // height: size.height * .7,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+      decoration: BoxDecoration(
+        border: Border(
+          left: isCenter
+              ? const BorderSide(color: AppColors.mainBlue)
+              : const BorderSide(color: Colors.transparent),
+          right: isCenter
+              ? const BorderSide(color: AppColors.mainBlue)
+              : const BorderSide(color: Colors.transparent),
+        ),
+      ),
+      child: Column(
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 10),
+          Image.asset(
+            image,
+            height: Responsive.isMobile(context)
+                ? size.height * .5
+                : size.height * .4,
+            fit: BoxFit.fitHeight,
+          ),
+          const SizedBox(height: 10),
+          Text(
+            description,
+            textAlign: TextAlign.center,
+          )
+        ],
       ),
     );
   }

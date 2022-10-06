@@ -6,9 +6,12 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mother_international_comp_website/constants/app_colors.dart';
+import 'package:mother_international_comp_website/constants/app_routes.dart';
 
 import '../../constants/utils.dart';
 import '../../providers/contestant.dart';
@@ -19,8 +22,9 @@ import '../../widgets/custom_button.dart';
 class RegistrationForm extends StatefulWidget {
   const RegistrationForm({
     Key? key,
+    required this.regContext,
   }) : super(key: key);
-
+  final BuildContext regContext;
   @override
   State<RegistrationForm> createState() => _RegistrationFormState();
 }
@@ -31,11 +35,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
   final dOBController = TextEditingController();
   final emailController = TextEditingController();
   final contactNumController = TextEditingController();
-  final iDNumberController = TextEditingController();
+  final contactNumberController = TextEditingController();
   final istaHandelController = TextEditingController();
   final addressController = TextEditingController();
-  final provinceController = TextEditingController();
-  final categoryController = TextEditingController();
+
+  final modelingSchoolController = TextEditingController();
+  final tShirtSizeController = TextEditingController();
 
   //contestant is Under 18 years old
   final under18Controller = TextEditingController();
@@ -47,6 +52,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   final formKey = GlobalKey<FormState>();
 
+  bool isUnder18 = false;
+
   // XFile? _userImage;
 
   @override
@@ -56,16 +63,18 @@ class _RegistrationFormState extends State<RegistrationForm> {
     dOBController.dispose();
     emailController.dispose();
     contactNumController.dispose();
-    iDNumberController.dispose();
+    contactNumberController.dispose();
     istaHandelController.dispose();
     addressController.dispose();
-    provinceController.dispose();
+
     under18Controller.dispose();
     gNameController.dispose();
     gSurnameController.dispose();
     gContactNumberController.dispose();
     gEmailController.dispose();
-    categoryController.dispose();
+
+    modelingSchoolController.dispose();
+    tShirtSizeController.dispose();
     super.dispose();
   }
 
@@ -157,7 +166,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
     return url;
   }
 
-  Future submitForm() async {
+  Future submitForm(context, size) async {
     setState(() {
       loading = true;
     });
@@ -187,13 +196,20 @@ class _RegistrationFormState extends State<RegistrationForm> {
       name: nameController.text.trim(),
       lastName: lastNameController.text.trim(),
       email: emailController.text.trim(),
-      idNumber: iDNumberController.text.trim(),
+      contactNumber: contactNumberController.text.trim(),
       dob: dOBController.text.trim(),
       instaHandle: istaHandelController.text.trim(),
       address: addressController.text.trim(),
       category: categoryValue!,
       hSPhotoUrl: hsurl,
       fLPhotoUrl: flurl,
+      isUnder18: isUnder18,
+      gName: isUnder18 ? gNameController.text.trim() : null,
+      gSurname: isUnder18 ? gSurnameController.text.trim() : null,
+      gContactNumber: isUnder18 ? gContactNumberController.text.trim() : null,
+      gEmail: isUnder18 ? gEmailController.text.trim() : null,
+      modelingSchoolContact: modelingSchoolController.text.trim(),
+      tShirtSize: tShirtSizeController.text.trim(),
     );
 
     final json = contestant.toJson();
@@ -204,28 +220,23 @@ class _RegistrationFormState extends State<RegistrationForm> {
       loading = false;
     });
 
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) {
-          return Center(
-            child: Container(
-              child: Column(
-                children: [
-                  Text(
-                      'You have successfully entered! We will be in contact with you!'),
-                ],
-              ),
-            ),
-          );
-        });
-    nameController.clear();
-    lastNameController.clear();
-    emailController.clear();
-    iDNumberController.clear();
-    dOBController.clear();
-    istaHandelController.clear();
-    addressController.clear();
+    showCustomDialog(widget.regContext, size);
+
+    // nameController.clear();
+    // lastNameController.clear();
+    // emailController.clear();
+    // contactNumberController.clear();
+    // dOBController.clear();
+    // istaHandelController.clear();
+    // addressController.clear();
+
+    // under18Controller.clear();
+    // gNameController.clear();
+    // gSurnameController.clear();
+    // gContactNumberController.clear();
+    // gEmailController.clear();
+    // modelingSchoolController.clear();
+    // tShirtSizeController.clear();
   }
 
   final categoryItems = [
@@ -332,7 +343,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
         const SizedBox(height: 20),
         TextFormField(
           enabled: !loading,
-          controller: iDNumberController,
+          controller: contactNumberController,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
               // width: 0.0 produces a thin "hairline" border
@@ -347,12 +358,12 @@ class _RegistrationFormState extends State<RegistrationForm> {
               ),
               borderRadius: BorderRadius.circular(15),
             ),
-            labelText: 'ID Number',
+            labelText: 'Contact Number',
           ),
           keyboardType: TextInputType.number,
           validator: (value) {
-            if (value != null && value.length != 13) {
-              return 'Enter valid South African ID number';
+            if (value != null && value.length != 10) {
+              return 'Enter a valid contact number';
             } else {
               return null;
             }
@@ -473,6 +484,62 @@ class _RegistrationFormState extends State<RegistrationForm> {
             ),
           ),
         ),
+        const SizedBox(height: 20),
+        TextFormField(
+            enabled: !loading,
+            controller: modelingSchoolController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              labelText: 'Modeling School & coach number (N/A if non)',
+            ),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your modeling school';
+              } else {
+                return null;
+              }
+            }),
+        const SizedBox(height: 20),
+        TextFormField(
+            enabled: !loading,
+            controller: tShirtSizeController,
+            decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
+                ),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              labelText: 'T-Shirt Size',
+            ),
+            keyboardType: TextInputType.name,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter your t-shirt size';
+              } else {
+                return null;
+              }
+            }),
         const SizedBox(height: 20),
       ],
     );
@@ -601,7 +668,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   const SizedBox(width: 30),
                   Expanded(
                     child: TextFormField(
-                      controller: iDNumberController,
+                      controller: contactNumberController,
                       decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           // width: 0.0 produces a thin "hairline" border
@@ -616,13 +683,13 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           ),
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        labelText: 'ID Number',
+                        labelText: 'Contact number',
                         enabled: !loading,
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
-                        if (value != null && value.length != 13) {
-                          return 'Enter valid South African ID number';
+                        if (value != null && value.length != 10) {
+                          return 'Enter valid contact number';
                         } else {
                           return null;
                         }
@@ -769,6 +836,355 @@ class _RegistrationFormState extends State<RegistrationForm> {
                   ),
                 ],
               ),
+            if (!Responsive.isMobile(context)) const SizedBox(height: 20),
+            if (!Responsive.isMobile(context))
+              Row(
+                children: [
+                  Expanded(
+                    child: TextFormField(
+                        enabled: !loading,
+                        controller: modelingSchoolController,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelText:
+                              'Modeling School & coach number (N/A if non)',
+                        ),
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your modeling school';
+                          } else {
+                            return null;
+                          }
+                        }),
+                  ),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: TextFormField(
+                        enabled: !loading,
+                        controller: tShirtSizeController,
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            // width: 0.0 produces a thin "hairline" border
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          border: OutlineInputBorder(
+                            borderSide: const BorderSide(
+                              color: Color.fromARGB(255, 221, 221, 221),
+                            ),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          labelText: 'T-Shirt Size',
+                        ),
+                        keyboardType: TextInputType.name,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Please enter your t-shirt size';
+                          } else {
+                            return null;
+                          }
+                        }),
+                  ),
+                ],
+              ),
+            const SizedBox(height: 20),
+            Center(
+              child: CheckboxListTile(
+                title: const Text('Contestant is under 18'),
+                controlAffinity: ListTileControlAffinity.leading,
+                value: isUnder18,
+                onChanged: (value) {
+                  setState(() {
+                    isUnder18 = value!;
+                  });
+                },
+                activeColor: AppColors.mainBlue,
+                checkColor: Colors.white,
+              ),
+            ),
+            const SizedBox(height: 30),
+            if (Responsive.isMobile(context) && isUnder18)
+              Column(
+                children: [
+                  Text(
+                    'Guardian Details',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline2!
+                        .copyWith(fontSize: 40),
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                      enabled: !loading,
+                      controller: gNameController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        labelText: 'Guardian Name',
+                      ),
+                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter guardian name';
+                        } else {
+                          return null;
+                        }
+                      }),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                      enabled: !loading,
+                      controller: gSurnameController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        labelText: 'Guardian Surname',
+                      ),
+                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter guardian surname';
+                        } else {
+                          return null;
+                        }
+                      }),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                      enabled: !loading,
+                      controller: gContactNumberController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          // width: 0.0 produces a thin "hairline" border
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Color.fromARGB(255, 221, 221, 221),
+                          ),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        labelText: 'Guardian Contact Number',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Please enter guardian contact number';
+                        } else if (value.length != 10) {
+                          return 'Enter valid guardian contact number';
+                        } else {
+                          return null;
+                        }
+                      }),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    enabled: !loading,
+                    controller: gEmailController,
+                    decoration: InputDecoration(
+                      enabledBorder: OutlineInputBorder(
+                        // width: 0.0 produces a thin "hairline" border
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 221, 221, 221),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Color.fromARGB(255, 221, 221, 221),
+                        ),
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      labelText: 'Guardian email',
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (email) =>
+                        email != null && !EmailValidator.validate(email)
+                            ? 'Enter a valid email'
+                            : null,
+                  ),
+                  const SizedBox(height: 20),
+                ],
+              ),
+            if (!Responsive.isMobile(context) && isUnder18)
+              Column(
+                children: [
+                  Text(
+                    'Guardian Details',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline2!
+                        .copyWith(fontSize: 50),
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            enabled: !loading,
+                            controller: gNameController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                // width: 0.0 produces a thin "hairline" border
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              labelText: 'Guardian Name',
+                            ),
+                            keyboardType: TextInputType.name,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter guardian name';
+                              } else {
+                                return null;
+                              }
+                            }),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: TextFormField(
+                            enabled: !loading,
+                            controller: gSurnameController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                // width: 0.0 produces a thin "hairline" border
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              labelText: 'Guardian Surname',
+                            ),
+                            keyboardType: TextInputType.name,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter guardian surname';
+                              } else {
+                                return null;
+                              }
+                            }),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            enabled: !loading,
+                            controller: gContactNumberController,
+                            decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                // width: 0.0 produces a thin "hairline" border
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: const BorderSide(
+                                  color: Color.fromARGB(255, 221, 221, 221),
+                                ),
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              labelText: 'Guardian Contact Number',
+                            ),
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter guardian contact number';
+                              } else if (value.length != 10) {
+                                return 'Enter valid guardian contact number';
+                              } else {
+                                return null;
+                              }
+                            }),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: TextFormField(
+                          enabled: !loading,
+                          controller: gEmailController,
+                          decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              // width: 0.0 produces a thin "hairline" border
+                              borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 221, 221, 221),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                color: Color.fromARGB(255, 221, 221, 221),
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                            ),
+                            labelText: 'Guardian Email',
+                          ),
+                          keyboardType: TextInputType.emailAddress,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                          validator: (email) =>
+                              email != null && !EmailValidator.validate(email)
+                                  ? 'Enter a valid email'
+                                  : null,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             const SizedBox(height: 30),
             Text(
               'Photo upload',
@@ -885,7 +1301,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                           dOBController.text.isEmpty) {
                         return;
                       } else {
-                        submitForm();
+                        submitForm(context, size);
                       }
                     },
                   ),
@@ -898,4 +1314,44 @@ class _RegistrationFormState extends State<RegistrationForm> {
 
   DropdownMenuItem<String> buildMenuCategoryItem(String item) =>
       DropdownMenuItem(value: item, child: Text(item));
+
+  void showCustomDialog(BuildContext regContext, Size size) => showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.check, size: 70, color: AppColors.mainBlue),
+                  const Text(
+                    'Thanks for entering!',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text(
+                    'You have successfully entered, We will be in contact with you!',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 20),
+                  ),
+                  const SizedBox(height: 12),
+                  CustomButton(
+                      title: 'Close',
+                      press: () {
+                        Navigator.of(context).pop();
+                        Get.offAllNamed(AppRoutes.homeRoute);
+                      }),
+                ],
+              ),
+            ),
+          );
+        },
+      );
 }

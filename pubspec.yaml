@@ -24,6 +24,7 @@ dependencies:
   google_fonts: ^3.0.1
   image_picker: ^0.8.5+3
   intl: ^0.17.0
+  lottie: ^1.4.3
   url_launcher: ^6.1.5
   url_strategy: ^0.2.0
   websafe_svg: ^2.1.2+2
@@ -45,3 +46,5 @@ flutter:
     - assets/images/models/
     - assets/images/international winners/
     - assets/images/logo/
+    - assets/images/wears/
+    - assets/animations/
