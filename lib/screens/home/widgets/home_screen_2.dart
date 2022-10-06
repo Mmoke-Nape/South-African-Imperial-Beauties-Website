@@ -29,7 +29,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .1
                 : size.width * .07,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Kendall Savage.png',
+              image:
+                  'http://nebula.wsimg.com/eacc2ba1d0996e2cc19f21d0eef3ebd2?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Junior Miss',
             ),
           ),
@@ -39,7 +40,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .09
                 : size.width * .12,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Jalynn Brown.png',
+              image:
+                  'http://nebula.wsimg.com/e81d877b0e3d4fbb1f5b810578a6a9e1?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Junior Teen',
             ),
           ),
@@ -50,7 +52,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .12
                 : size.width * .25,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Teagan Fields.png',
+              image:
+                  'http://nebula.wsimg.com/dc3567de10cbeb49cbcf842c2ec9b067?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Preteen',
             ),
           ),
@@ -63,7 +66,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .1
                 : size.width * .07,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Lilly Parker.png',
+              image:
+                  'http://nebula.wsimg.com/d9e4ef5bbef93259f1aacd4d084de616?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Teen',
               isOnRightSide: true,
             ),
@@ -74,7 +78,8 @@ class HomeScreen2 extends StatelessWidget {
                 : size.height * .1,
             right: size.width * .12,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Yolanda Grayson.png',
+              image:
+                  'http://nebula.wsimg.com/21dc8afcc46fbf5517f0cec0fa2350a5?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Ms.',
               isOnRightSide: true,
             ),
@@ -86,7 +91,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .12
                 : size.width * .25,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Lauren Madison.png',
+              image:
+                  'http://nebula.wsimg.com/7cfea4334167ee58ce0423e7ee7c8f8a?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Miss',
               isOnRightSide: true,
             ),
@@ -100,7 +106,8 @@ class HomeScreen2 extends StatelessWidget {
                 ? size.width * .4
                 : size.width * .45,
             child: const WinnerDisplayItem(
-              image: 'assets/images/international winners/Diane Boyd.png',
+              image:
+                  'http://nebula.wsimg.com/300fe8f9dd453372c57c5db0a779e963?AccessKeyId=15269ACCC4C8BB742AF7&disposition=0&alloworigin=1',
               title: 'World Imperial Classic Ms.',
               isCenter: true,
             ),

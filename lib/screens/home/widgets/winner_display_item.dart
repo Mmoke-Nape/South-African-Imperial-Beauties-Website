@@ -53,7 +53,7 @@ class WinnerDisplayItem extends StatelessWidget {
           width:
               Responsive.isMobile(context) ? size.width * .3 : size.width * .12,
           color: Colors.white,
-          child: Image.asset(
+          child: Image.network(
             image,
             fit: BoxFit.cover,
           ),

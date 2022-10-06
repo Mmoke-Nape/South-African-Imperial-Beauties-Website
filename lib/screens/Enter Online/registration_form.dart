@@ -1032,7 +1032,7 @@ class _RegistrationFormState extends State<RegistrationForm> {
                         ),
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      labelText: 'Guardian email',
+                      labelText: 'Guardian Email',
                     ),
                     keyboardType: TextInputType.emailAddress,
                     autovalidateMode: AutovalidateMode.onUserInteraction,

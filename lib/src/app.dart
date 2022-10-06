@@ -3,13 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mother_international_comp_website/src/settings/settings_controller.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_routes.dart';
-import '../screens/About/about_screen.dart';
-import '../screens/Contact/contactScreen.dart';
 import '../screens/Enter Online/registration_screen.dart';
 import '../screens/home/home_screen.dart';
-import 'settings/settings_controller.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 
@@ -96,16 +94,16 @@ class MyApp extends StatelessWidget {
           // home: const HomeScreen(),
 
           getPages: [
-            GetPage(
-              name: AppRoutes.aboutRoute,
-              page: () => const AboutScreen(),
-              title: 'Learn About Us',
-            ),
-            GetPage(
-              name: AppRoutes.contactRoute,
-              page: () => const ContactScreen(),
-              title: 'Get In Touch',
-            ),
+            // GetPage(
+            //   name: AppRoutes.aboutRoute,
+            //   page: () => const AboutScreen(),
+            //   title: 'Learn About Us',
+            // ),
+            // GetPage(
+            //   name: AppRoutes.contactRoute,
+            //   page: () => const ContactScreen(),
+            //   title: 'Get In Touch',
+            // ),
             GetPage(
               name: AppRoutes.registerRoute,
               page: () => const RegistrationScreen(),
