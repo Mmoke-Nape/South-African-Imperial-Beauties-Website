@@ -792,7 +792,7 @@ Under no circumstances will any refunds be made.
                         const CategoryDivisions(
                           title: 'INTERVIEW',
                           description:
-                              'During this competition the delegates will be evaluated on their speaking abilities, overall appearance, communication skills and personality. It will be a fun time, so relax and be you! Delegates may interview suit or dress of choice.',
+                              'During this competition the delegates will be evaluated on their speaking abilities, overall appearance, communication skills and personality. It will be a fun time, so relax and be you! Delegates may wear interview suit or dress of choice.',
                           image:
                               'https://i0.wp.com/hellobombshell.com/wp-content/uploads/2022/01/pageant-interview-outfit-jumpsuit-sabrinakvictor.jpg?resize=840%2C1024&ssl=1',
                         ),

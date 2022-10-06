@@ -90,8 +90,8 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
-          home: const RegistrationScreen(),
-          // home: const HomeScreen(),
+          // home: const RegistrationScreen(),
+          home: const HomeScreen(),
 
           getPages: [
             // GetPage(
