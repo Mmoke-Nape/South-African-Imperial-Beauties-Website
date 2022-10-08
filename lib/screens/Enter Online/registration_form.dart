@@ -2,12 +2,14 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mother_international_comp_website/constants/app_colors.dart';
 import 'package:mother_international_comp_website/constants/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../providers/contestant.dart';
 import '../../responsive/responsive.dart';
@@ -1257,8 +1259,43 @@ class _RegistrationFormState extends State<RegistrationForm> {
                 ],
               ),
             ),
-            const SizedBox(height: 50),
+            const SizedBox(height: 40),
             if (Responsive.isMobile(context)) const Divider(),
+            RichText(
+              textAlign: TextAlign.center,
+              text: TextSpan(
+                style: const TextStyle(color: Colors.black87),
+                children: [
+                  const TextSpan(
+                    text: 'Please email proof of payment to ',
+                    style: TextStyle(),
+                  ),
+                  TextSpan(
+                      text: 'gladysN@worldimperialbeauties.com',
+                      // style:
+                      //     const TextStyle(decoration: TextDecoration.underline),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () =>
+                            _openEmail('gladysN@worldimperialbeauties.com')),
+                  const TextSpan(text: ' or whatsapp to Gladys on'),
+                  TextSpan(
+                      text: ' 082 378 3843',
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () => _makePhoneCall('082 378 3843'))
+                ],
+              ),
+            ),
+            const SizedBox(height: 30),
+            Text('Banking Details',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(fontWeight: FontWeight.bold)),
+            const SizedBox(height: 10),
+            const Text('Bank: Capitec Bank'),
+            const Text('Name: LM NAPE'),
+            const Text('Account number: 1509556441'),
+            const SizedBox(height: 20),
             if (Responsive.isMobile(context)) const SizedBox(height: 30),
             loading
                 ? const SizedBox(
@@ -1348,4 +1385,20 @@ class _RegistrationFormState extends State<RegistrationForm> {
           );
         },
       );
+}
+
+Future<void> _makePhoneCall(String phoneNumber) async {
+  final Uri launchUri = Uri(
+    scheme: 'tel',
+    path: phoneNumber,
+  );
+  await launchUrl(launchUri);
+}
+
+Future<void> _openEmail(String email) async {
+  final Uri launchUri = Uri(
+    scheme: 'mailto',
+    path: email,
+  );
+  await launchUrl(launchUri);
 }

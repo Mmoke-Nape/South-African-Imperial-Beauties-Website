@@ -200,7 +200,7 @@ class RegistrationScreen extends StatelessWidget {
                     child: SizedBox(
                       width: size.width * .7,
                       child: const Text(
-                        'Entries open: 7 September 2022\nCompetition date: March 2023',
+                        'Entries open: 9 September 2022\nCompetition date: March 2023',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white,
@@ -353,7 +353,7 @@ class RegistrationScreen extends StatelessWidget {
                                           ),
                                           const SizedBox(height: 30),
                                           const Text(
-                                            'Top 16, Top 5 , Top 3 Category winner:  will recieve an opportunity to compete overseas for the international title',
+                                            'Top 16, Top 5: Will recieve an opportunity to compete overseas for the international title\n Top 3: 2nd Princess: R2000, 1st Princess: R3000, Queen: R5000',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: Colors.white,
@@ -528,58 +528,6 @@ class RegistrationScreen extends StatelessWidget {
                                             CrossAxisAlignment.center,
                                         children: [
                                           Text(
-                                            'We Supply',
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline2!
-                                                .copyWith(
-                                                    // color: AppColors.mainBlue,
-                                                    color: Colors.white,
-                                                    fontSize: 30),
-                                          ),
-                                          const SizedBox(height: 20),
-                                          const Text(
-                                            'Offical T-Shirt',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Text(
-                                            'Carry bag for all finalists',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 10),
-                                          const Text(
-                                            'Official finalist sash',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 40),
-                              SizedBox(
-                                width: Responsive.isMobile(context)
-                                    ? null
-                                    : size.width * .4,
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Text(
                                             'Entry Fee',
                                             style: Theme.of(context)
                                                 .textTheme
@@ -599,6 +547,16 @@ class RegistrationScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 40),
+                              SizedBox(
+                                width: Responsive.isMobile(context)
+                                    ? null
+                                    : size.width * .4,
+                                child: Row(
+                                  children: [
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
@@ -625,45 +583,50 @@ class RegistrationScreen extends StatelessWidget {
                                         ],
                                       ),
                                     ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              'Contact Information',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headline2!
+                                                  .copyWith(
+                                                      // color: AppColors.mainBlue,
+                                                      color: Colors.white,
+                                                      fontSize: 30),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            const Text(
+                                              'Gladys 082 378 3843 / 065 827 4892',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 10),
+                                            const Text(
+                                              'GladysN@worldimperialbeauties.com',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
                               const SizedBox(height: 40),
-                              Center(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Contact Information',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline2!
-                                          .copyWith(
-                                              // color: AppColors.mainBlue,
-                                              color: Colors.white,
-                                              fontSize: 30),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'Gladys 082 378 3843 / 065 827 4892',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    const Text(
-                                      'GladysN@worldimperialbeauties.com',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
                             ],
                           ),
                         ),
                       ),
+                      if (!Responsive.isMobile(context))
+                        const SizedBox(width: 50),
                       RegistrationForm(
                         regContext: context,
                       ),
@@ -697,7 +660,7 @@ class RegistrationScreen extends StatelessWidget {
 
 9. By entering each contestant commits herself to the following:
       • Compulsory sponsorship fee of R3 500
-      • Sell 3 x Gala tickets for R250 each (R150 for children under 10 years-include dinner) If the tickets are not sold the contestant must raise the same value additionally and submit along with the sponsorship.
+      • Sell 3 x Gala tickets for R400 each for a three course meal (R250 for children under 10 years-include dinner) If the tickets are not sold the contestant must raise the same value additionally and submit along with the sponsorship. 
       • R100 for courier of the sashes      
 
 10. All finalists receive finalist sashes to be used discreetly and worn with pride. Any abuse will lead to disqualification.
@@ -706,15 +669,15 @@ class RegistrationScreen extends StatelessWidget {
 
 12. The overseas grand supreme prize will only materialize when there are more than 20 participants per division (4-12 & 13-50+). 
 
-13. Payment Plan: (Strictly) This include Sponsorship Fee R3 500, R750 for tickets & dinner and R100.
-               Payment 1: R1000 (October)
-               Payment 2: R1500 (November)
-               Payment 3: R1500 (December)
-               Payment 4: R350 (January 2023)   
+13. Payment Plan: (Strictly) This include Sponsorship Fee R3 500, R1200 for tickets & dinner and R100.
+               Payment 1: R1500 (October)
+               Payment 2: R1200 (November)
+               Payment 3: R1200 (December)
+               Payment 4: R900 (January 2023)   
 
 14. Cash payout are dependent on the number of contestants per category. Cash payments will be done after a month after the competition.
 
- The total R4350 will include:
+ The total R4800 will include:
         - T-shirt.
         - finalist Sash
         - All courier costs
