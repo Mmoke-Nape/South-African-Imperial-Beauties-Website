@@ -164,7 +164,7 @@ class HomeScreen1 extends StatelessWidget {
                         ? size.width * .8
                         : size.width * .3,
                     child: Text(
-                      'South African Imperial Beauties is a celebration of womanhood through an equal opporitinty platform for women to showcase their talent and beauty to the world.',
+                      'South African Imperial Beauties is a celebration of womanhood through an equal opportunity platform for women to showcase their talent and beauty to the world.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: Responsive.isMobile(context) ? 20 : null),

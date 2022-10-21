@@ -282,6 +282,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter your name';
+              } else {
+                return null;
               }
             }),
         const SizedBox(height: 20),
@@ -308,6 +310,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
             validator: (value) {
               if (value!.isEmpty) {
                 return 'Please enter your last name';
+              } else {
+                return null;
               }
             }),
         const SizedBox(height: 20),
@@ -389,6 +393,8 @@ class _RegistrationFormState extends State<RegistrationForm> {
           validator: (value) {
             if (value!.isEmpty) {
               return 'Please enter your date of birth';
+            } else {
+              return null;
             }
           },
           onTap: () async {
@@ -410,21 +416,21 @@ class _RegistrationFormState extends State<RegistrationForm> {
             enabled: !loading,
             controller: istaHandelController,
             decoration: InputDecoration(
-                enabledBorder: OutlineInputBorder(
-                  // width: 0.0 produces a thin "hairline" border
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 221, 221, 221),
-                  ),
-                  borderRadius: BorderRadius.circular(15),
+              enabledBorder: OutlineInputBorder(
+                // width: 0.0 produces a thin "hairline" border
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
                 ),
-                border: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color.fromARGB(255, 221, 221, 221),
-                  ),
-                  borderRadius: BorderRadius.circular(15),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              border: OutlineInputBorder(
+                borderSide: const BorderSide(
+                  color: Color.fromARGB(255, 221, 221, 221),
                 ),
-                labelText: 'Instagram Handle',
-                labelStyle: TextStyle()),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              labelText: 'Instagram Handle',
+            ),
             keyboardType: TextInputType.text,
             validator: (value) {
               if (value!.isEmpty) {

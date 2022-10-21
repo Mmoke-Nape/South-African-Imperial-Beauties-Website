@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
           // Provide the generated AppLocalizations to the MaterialApp. This
           // allows descendant Widgets to display the correct translations
           // depending on the user's locale.
+          useInheritedMediaQuery: true,
           title: 'World Imperial Beauties South Africa',
           localizationsDelegates: const [
             AppLocalizations.delegate,

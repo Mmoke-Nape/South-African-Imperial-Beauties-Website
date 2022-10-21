@@ -140,20 +140,14 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: AppColors.scaffoldBg,
         automaticallyImplyLeading: true,
       ),
-      body: Scrollbar(
-        thumbVisibility: Responsive.isMobile(context) ? false : true,
-        thickness: 15,
-
-        // hoverThickness: 20,
-        child: SingleChildScrollView(
-          child: Column(
-            children: const [
-              HomeScreen1(),
-              HomeScreen2(),
-              SizedBox(height: 50),
-              Footer(),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: const [
+            HomeScreen1(),
+            HomeScreen2(),
+            SizedBox(height: 50),
+            Footer(),
+          ],
         ),
       ),
     );
